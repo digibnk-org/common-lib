@@ -1,2 +1,3 @@
 com.digibnk.common.config.CommonSecurityAutoConfig
 com.digibnk.common.config.CommonOpenApiAutoConfig
+com.digibnk.common.config.JpaAuditingAutoConfig
