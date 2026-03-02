@@ -1,27 +1,49 @@
 syntax = "proto3";
 
+package digibnk.account;
+
 option java_package = "com.digibnk.common.grpc";
 option java_outer_classname = "AccountProto";
+option java_multiple_files = true;
 
 service AccountService {
-  rpc debit (DebitRequest) returns (DebitResponse);
-  rpc credit (CreditRequest) returns (CreditResponse);
+  rpc Debit (DebitRequest) returns (DebitResponse);
+  rpc Credit (CreditRequest) returns (CreditResponse);
+  rpc GetAccountDetails (AccountDetailsRequest) returns (AccountDetailsResponse);
 }
 
+// Debit (reduce balance) — used for WITHDRAWAL and TRANSFER source
 message DebitRequest {
-  string accountNumber = 1;
-  string amount = 2;
+  int64 account_id = 1;
+  string amount = 2;   // BigDecimal as string to avoid floating point precision issues
 }
 
 message DebitResponse {
-  string status = 1;
+  bool success = 1;
+  string message = 2;
+  string new_balance = 3;
 }
 
+// Credit (increase balance) — used for DEPOSIT and TRANSFER target
 message CreditRequest {
-  string accountNumber = 1;
+  int64 account_id = 1;
   string amount = 2;
 }
 
 message CreditResponse {
-  string status = 1;
+  bool success = 1;
+  string message = 2;
+  string new_balance = 3;
+}
+
+message AccountDetailsRequest {
+  int64 account_id = 1;
+}
+
+message AccountDetailsResponse {
+  int64 id = 1;
+  string account_number = 2;
+  string status = 3;        // ACTIVE / INACTIVE / SUSPENDED
+  string balance = 4;
+  string currency = 5;
 }
